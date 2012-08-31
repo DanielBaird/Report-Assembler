@@ -103,8 +103,8 @@ RA.do_section = (name, section, globals) ->
 	merged_vars = $.extend {}, globals, section.vars
 	for text in section.texts
 		if RA.holds(text.condition, merged_vars)
-#			if is_blank and section.title?
-#				$('body').append "<h2>#{section.title}</h2>"
+			if is_blank and section.title?
+				$('body').append "<h2>#{section.title}</h2>"
 
 			is_blank = false
 			$('body').append RA.fillout(text.content, merged_vars)

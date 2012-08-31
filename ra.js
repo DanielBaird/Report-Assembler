@@ -116,6 +116,9 @@
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       text = _ref[_i];
       if (RA.holds(text.condition, merged_vars)) {
+        if (is_blank && (section.title != null)) {
+          $('body').append("<h2>" + section.title + "</h2>");
+        }
         is_blank = false;
         $('body').append(RA.fillout(text.content, merged_vars));
         _results.push($('body').append(" "));
