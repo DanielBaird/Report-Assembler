@@ -4,28 +4,68 @@
 
   RA = window.RA = {};
 
+  RA.resolve_term = function(term, vars) {
+    return vars[term];
+  };
+
   RA.holds = function(condition, vars) {
-    var gtmatch;
-    if (condition === 'always') {
+    var conditions, evaluator, match_result, pattern, regex;
+    conditions = {
+      "always": function() {
+        return true;
+      },
+      "(\\S+)\\s*(<|>|=|==|!=|!==|<>)\\s*(\\S+)": function(matches, vars) {
+        var left, right;
+        left = RA.resolve_term(matches[1], vars);
+        right = RA.resolve_term(matches[3], vars);
+        console.log(left);
+        switch (matches[2]) {
+          case '<':
+            return left < right;
+          case '>':
+            return left > right;
+          case '=':
+          case '==':
+            return left === right;
+          case '!=':
+          case '!==':
+          case '<>':
+            return left !== right;
+        }
+      }
+    };
+    if (condition === void 0) {
       return true;
     }
-    gtmatch = /$$\S+ > $$\S+/.exec(conditon);
-    return console.log(gtmatch);
+    for (pattern in conditions) {
+      evaluator = conditions[pattern];
+      regex = new RegExp(pattern);
+      match_result = regex.exec(condition);
+      if (match_result !== null) {
+        return evaluator(match_result, vars);
+      }
+    }
   };
 
   RA.fillout = function(content, vars) {
+    var value, varname;
+    for (varname in vars) {
+      value = vars[varname];
+      content = content.replace("\$\$" + varname, value);
+    }
     return content;
   };
 
   RA.do_section = function(name, section) {
     var text, _i, _len, _ref, _results;
-    alert("doing " + name);
+    console.log("doing " + name);
     _ref = section.texts;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       text = _ref[_i];
-      if (RA.holds(text.condition, text.vars)) {
-        _results.push($('body').append(RA.fillout(text.content, text.vars)));
+      if (RA.holds(text.condition, section.vars)) {
+        $('body').append(RA.fillout(text.content, section.vars));
+        _results.push($('body').append(" "));
       } else {
         _results.push(void 0);
       }
@@ -34,33 +74,41 @@
   };
 
   RA.start = function() {
-    var doc, name, section, _ref;
+    var doc, name, section, _ref, _results;
     doc = {
       sections: {
         intro: {
           vars: {
             a: 10,
-            b: 12
+            b: 10
           },
           texts: [
             {
-              condition: 'always',
-              content: 'A is $$a.'
+              content: 'A and B are always interesting.'
             }, {
-              condition: '$$a > $$b',
+              condition: 'a == b',
+              content: 'In this case, A and B are both $$a.'
+            }, {
+              condition: 'a != b',
+              content: 'In this case, A is $$a.'
+            }, {
+              condition: 'a > b',
               content: 'That is larger than B, which is $$b.'
+            }, {
+              condition: 'a < b',
+              content: 'That is smaller than B, which is $$b.'
             }
           ]
         }
       }
     };
-    console.log(doc);
     _ref = doc.sections;
+    _results = [];
     for (name in _ref) {
       section = _ref[name];
-      RA.do_section(name, section);
+      _results.push(RA.do_section(name, section));
     }
-    return false;
+    return _results;
   };
 
   $(function() {
