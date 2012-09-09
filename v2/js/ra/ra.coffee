@@ -44,10 +44,39 @@ $ ->
 				]
 	}
 
-	RA.produce(doc)
+#################################################################
+#	RA.produce(doc)
+
+window.RA ||= {}
+
+data = new RA.Models.Dataset { name: 'my data set', updated: 2012 }
+
+dataview = new RA.Views.DatasetFull { model: data }
+
+$('.radoc').append dataview.$el
+
+dataview.render()
+
+year = data.get 'updated'
+
+data.set { name: 'freshly renamed data' }
+
+#################################################################
+
+$ ->
+
+	docView = Backbone.View.extend({
+		el: $('.radoc').first(),
+
+		initialize: () ->
+			_.bindAll this, 'render'
+			@render()
+
+		render: () ->
+			$(@el).append '<ul> <li> a doc </li> </ul>'
+	})
 
 
-RA = window.RA = {}
 
 RA.resolve_term = (term, vars) ->
 	if isNaN term

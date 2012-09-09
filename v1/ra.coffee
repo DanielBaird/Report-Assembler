@@ -1,14 +1,25 @@
 
 $ ->
+	# set up Parse storage
+	Parse.initialize "41lsI7DmaFx8DFDLgvmO4Ewu0sBGW6iziRrseXyP", "eittl0BlCWcgKRbQQLkPA04MLEy2wQfXc68rYA0z"
+
+	TestObject = Parse.Object.extend "TestObject"
+
+	tester = new TestObject()
+	tester.save( {foo: "bar"}, {
+		success: (object) ->
+			alert("yay! it worked");
+	})
+
 	doc = {
 		vars:
-			a: 101
+			a: 12
 			b: 4
 		sections:
 			intro:
 				title: 'Introduction'
 				vars:
-					b: 12
+					b: 100
 				texts: [
 					{
 						content: 'A and B are always interesting.'
