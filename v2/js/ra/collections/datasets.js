@@ -5,7 +5,7 @@
 
   RA.Collections || (RA.Collections = {});
 
-  RA.Collections.Datasets = Backbone.Collections.extend({
+  RA.Collections.Datasets = Backbone.Collection.extend({
     model: RA.Models.Dataset
   });
 

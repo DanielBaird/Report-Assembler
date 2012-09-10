@@ -1,5 +1,30 @@
 
 $ ->
+
+	#	RA.produce(doc)
+
+	window.RA ||= {}
+
+	allDatasets = new RA.Collections.Datasets()
+	data = new RA.Models.Dataset { name: 'my data set' }
+	allDatasets.add(data)
+
+	viewOfDatasets = new RA.Views.DatasetList { model: allDatasets }
+	viewOfDatasets.setElement $('.datasets')
+	viewOfDatasets.render()
+
+	allDocuments = new RA.Collections.Documents()
+	data = new RA.Models.Document { name: 'my document' }
+	allDocuments.add(data)
+
+	viewOfDocuments = new RA.Views.DocumentList { model: allDocuments }
+	viewOfDocuments.setElement $('.documents')
+	viewOfDocuments.render()
+
+
+
+	#################################################################
+
 	doc = {
 		vars:
 			a: 101
@@ -44,22 +69,6 @@ $ ->
 				]
 	}
 
-#################################################################
-#	RA.produce(doc)
-
-window.RA ||= {}
-
-data = new RA.Models.Dataset { name: 'my data set', updated: 2012 }
-
-dataview = new RA.Views.DatasetFull { model: data }
-
-$('.radoc').append dataview.$el
-
-dataview.render()
-
-year = data.get 'updated'
-
-data.set { name: 'freshly renamed data' }
 
 #################################################################
 
