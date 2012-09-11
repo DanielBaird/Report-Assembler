@@ -10,7 +10,7 @@ RA.Views.DocumentList = Backbone.View.extend {
 
 	initialize: () ->
 		console.log "init-ing a RA.Views.DocumentList"
-#		@model.bind 'reset', this.render, this
+		@model.on 'all', @render, this
 
 	render: () ->
 		html = "<h2>Documents</h2>"
@@ -33,7 +33,7 @@ RA.Views.SingleDocument = Backbone.View.extend {
 
 	initialize: () ->
 		console.log "init-ing a RA.Views.SingleDocument"
-#		@model.bind 'reset', this.render, this
+		@model.on 'change', @render, this
 
 	render: () ->
 		html = ''

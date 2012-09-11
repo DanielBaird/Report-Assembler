@@ -9,7 +9,8 @@
     tagName: 'div',
     className: 'documents',
     initialize: function() {
-      return console.log("init-ing a RA.Views.DocumentList");
+      console.log("init-ing a RA.Views.DocumentList");
+      return this.model.on('all', this.render, this);
     },
     render: function() {
       var html;
@@ -29,7 +30,8 @@
     tagName: 'div',
     className: 'singleDocument',
     initialize: function() {
-      return console.log("init-ing a RA.Views.SingleDocument");
+      console.log("init-ing a RA.Views.SingleDocument");
+      return this.model.on('change', this.render, this);
     },
     render: function() {
       var html, name;

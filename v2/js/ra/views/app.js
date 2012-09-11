@@ -5,6 +5,32 @@
 
   RA.Views || (RA.Views = {});
 
-  RA.Views.App = Backbone.View.extend({});
+  RA.Views.App = Backbone.View.extend({
+    tagName: 'div',
+    className: 'app',
+    docView: null,
+    dataView: null,
+    initialize: function() {
+      this.docView = new RA.Views.DatasetList({
+        model: this.model.datasets
+      });
+      this.dataView = new RA.Views.DocumentList({
+        model: this.model.documents
+      });
+      this.model.datasets.on('change', this.render(), this);
+      return console.log("init-ing a RA.Views.App");
+    },
+    refresh: function() {
+      return this.model.fetch();
+    },
+    render: function() {
+      var html;
+      html = "<div class=\"header\">\n	<h1>Report Assembler</h1>\n</div>\n\n<div class=\"matcher clearfix\">\n</div>\n\n<div class=\"result\">\n</div>\n\n<div class=\"footer\">footer</div>";
+      this.$el.html(html);
+      this.$el.find('.matcher').append(this.docView.render().el);
+      this.$el.find('.matcher').append(this.dataView.render().el);
+      return this;
+    }
+  });
 
 }).call(this);

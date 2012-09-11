@@ -5,13 +5,14 @@
 
   RA.Models || (RA.Models = {});
 
-  RA.Models.Dataset = Backbone.Model.extend({
+  RA.Models.Dataset = Parse.Object.extend({
+    className: "Dataset",
     defaults: {
-      name: "a data set",
+      name: "unnamed dataset",
       vars: {
-        a: 12,
-        b: 14
-      }
+        zero: 0
+      },
+      editing: false
     }
   });
 

@@ -2,7 +2,9 @@
 window.RA ||= {}
 RA.Models ||= {}
 
-RA.Models.Document = Backbone.Model.extend {
+# RA.Models.Document = Backbone.Model.extend {
+RA.Models.Document = Parse.Object.extend {
+	className: "Document"
 
 #	initialize: () ->
 

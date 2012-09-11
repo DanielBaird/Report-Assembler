@@ -20,6 +20,8 @@ body > div {
 
 h1, h2, h3, h4, h5 {
 	font-size: inherit;
+	padding: 0.5em 0;
+	margin: 0;
 }
 
 h1:before { content: '# '; }
@@ -27,6 +29,28 @@ h2:before { content: '## '; }
 h3:before { content: '### '; }
 h4:before { content: '#### '; }
 h5:before { content: '##### '; }
+
+.singleDataset.editing {
+	background: yellow;
+}
+
+.singleDataset button {
+	float: right;
+}
+
+.singleDataset button.delete, .singleDataset button.dontdelete {
+	display: none;
+}
+
+.singleDataset textarea, .singleDataset pre {
+	width: 80%;
+}
+
+.singleDataset textarea {
+	height: 5em;
+}
+
+
 
 .clearfix:before, .clearfix:after { content: ""; display: table; }
 .clearfix:after { clear: both; }

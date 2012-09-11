@@ -2,28 +2,18 @@
 (function() {
 
   $(function() {
-    var allDatasets, allDocuments, data, doc, viewOfDatasets, viewOfDocuments;
+    var appModel, appView, doc;
     window.RA || (window.RA = {});
-    allDatasets = new RA.Collections.Datasets();
-    data = new RA.Models.Dataset({
-      name: 'my data set'
-    });
-    allDatasets.add(data);
-    viewOfDatasets = new RA.Views.DatasetList({
-      model: allDatasets
-    });
-    viewOfDatasets.setElement($('.datasets'));
-    viewOfDatasets.render();
-    allDocuments = new RA.Collections.Documents();
-    data = new RA.Models.Document({
+    appModel = new RA.Models.App();
+    appModel.documents.add(new RA.Models.Document({
       name: 'my document'
+    }));
+    appView = new RA.Views.App({
+      model: appModel,
+      el: $('.app')
     });
-    allDocuments.add(data);
-    viewOfDocuments = new RA.Views.DocumentList({
-      model: allDocuments
-    });
-    viewOfDocuments.setElement($('.documents'));
-    viewOfDocuments.render();
+    appView.render();
+    appView.refresh();
     return doc = {
       vars: {
         a: 101,

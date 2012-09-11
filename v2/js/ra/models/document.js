@@ -5,7 +5,8 @@
 
   RA.Models || (RA.Models = {});
 
-  RA.Models.Document = Backbone.Model.extend({
+  RA.Models.Document = Parse.Object.extend({
+    className: "Document",
     defaults: {
       name: "a document",
       parts: [

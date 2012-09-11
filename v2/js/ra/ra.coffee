@@ -1,26 +1,18 @@
 
 $ ->
-
 	#	RA.produce(doc)
 
 	window.RA ||= {}
 
-	allDatasets = new RA.Collections.Datasets()
-	data = new RA.Models.Dataset { name: 'my data set' }
-	allDatasets.add(data)
+	appModel = new RA.Models.App()
 
-	viewOfDatasets = new RA.Views.DatasetList { model: allDatasets }
-	viewOfDatasets.setElement $('.datasets')
-	viewOfDatasets.render()
+	# check in some sample data
+#	appModel.datasets.add(new RA.Models.Dataset { name: 'my data set' })
+	appModel.documents.add(new RA.Models.Document { name: 'my document' })
 
-	allDocuments = new RA.Collections.Documents()
-	data = new RA.Models.Document { name: 'my document' }
-	allDocuments.add(data)
-
-	viewOfDocuments = new RA.Views.DocumentList { model: allDocuments }
-	viewOfDocuments.setElement $('.documents')
-	viewOfDocuments.render()
-
+	appView = new RA.Views.App({ model: appModel, el: $('.app') })
+	appView.render()
+	appView.refresh()
 
 
 	#################################################################

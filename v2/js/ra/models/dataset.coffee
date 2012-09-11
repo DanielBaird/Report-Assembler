@@ -2,15 +2,15 @@
 window.RA ||= {}
 RA.Models ||= {}
 
-RA.Models.Dataset = Backbone.Model.extend {
+RA.Models.Dataset = Parse.Object.extend {
+	className: "Dataset"
+#Backbone.Model.extend {
 
 #	initialize: () ->
 
 	defaults:
-		name: "a data set"
-		vars: {
-			a: 12
-			b: 14
-		}
+		name: "unnamed dataset"
+		vars: { zero: 0 }
+		editing: false
 
 }
