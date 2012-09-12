@@ -1,22 +1,32 @@
 
-body {
+
+* {
+	background: rgba(150,200,255,0.33);
+}
+
+
+html, body {
+	margin: 0;
+	background: #123;
 	font-family: "Book Antiqua", Georgia, serif;
 }
 
-div {
-	padding: 1%;
-	margin: 1%;
-	border: 1px solid gray;
-}
-
-body > div {
-	margin: 1% 0;
+div, pre {
+	padding: 5px;
+	margin: 5px 0 0 0;
 }
 
 .datasets, .documents {
-	width: 45%;
+	width: 47%;
 	float: left;
 }
+
+.datasets button,
+.documents button
+{
+	float: right;
+}
+
 
 h1, h2, h3, h4, h5 {
 	font-size: inherit;
@@ -24,33 +34,58 @@ h1, h2, h3, h4, h5 {
 	margin: 0;
 }
 
+h1:before, h2:before, h3:before, h4:before, h5:before {
+	color: #ccc;
+	font-weight: normal;
+	font-size: 75%;
+}
+
+
 h1:before { content: '# '; }
 h2:before { content: '## '; }
 h3:before { content: '### '; }
 h4:before { content: '#### '; }
 h5:before { content: '##### '; }
 
-.singleDataset.editing {
+.singleDataset.editing,
+.singleDocument.editing
+{
 	background: yellow;
 }
 
-.singleDataset button {
+.singleDataset.chosen,
+.singleDocument.chosen
+{
+	border: 10px solid red;
+}
+
+.singleDataset button,
+.singleDocument button
+{
 	float: right;
 }
 
-.singleDataset button.delete, .singleDataset button.dontdelete {
+.singleDataset button.delete, .singleDataset button.dontdelete,
+.singleDocument button.delete, .singleDocument button.dontdelete
+{
 	display: none;
 }
 
-.singleDataset textarea, .singleDataset pre {
-	width: 80%;
-}
-
-.singleDataset textarea {
+.singleDataset textarea, .singleDataset pre,
+.singleDocument textarea, .singleDocument pre
+{
+	margin: 5px 5px 5px auto;
+	width: 93%;
 	height: 5em;
+	overflow: auto;
 }
 
-
+.result .subtle {
+	display: block;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center;
+}
 
 .clearfix:before, .clearfix:after { content: ""; display: table; }
 .clearfix:after { clear: both; }

@@ -8,26 +8,24 @@
   RA.Models.App = Backbone.Model.extend({
     initialize: function() {
       this.datasets = new RA.Collections.Datasets();
-      return this.documents = new RA.Collections.Documents();
+      this.documents = new RA.Collections.Documents();
+      return this.result = new RA.Models.Result();
     },
     fetch: function() {
-      var ds;
-      ds = this.datasets;
       this.datasets.fetch({
-        success: function(collection) {
+        success: function() {
           return console.log("got datasets");
         },
         error: function() {
-          return console.warn("didn't get datasets");
+          return alert("couldn't load datasets!");
         }
       });
       return this.documents.fetch({
-        success: function(collection) {
-          console.log("got documents");
-          return collection.trigger('change');
+        success: function() {
+          return console.log("got documents");
         },
         error: function() {
-          return console.warn("didn't get documents");
+          return alert("couldn't load documents!");
         }
       });
     }

@@ -8,41 +8,127 @@
   RA.Views.DocumentList = Backbone.View.extend({
     tagName: 'div',
     className: 'documents',
+    docViews: [],
+    events: {
+      "click #newdocument": "addNew"
+    },
     initialize: function() {
-      console.log("init-ing a RA.Views.DocumentList");
       return this.model.on('all', this.render, this);
     },
     render: function() {
       var html;
-      html = "<h2>Documents</h2>";
+      html = "<button id=\"newdocument\">new</button>\n<h2>Documents</h2>";
       this.$el.html(html);
       _.each(this.model.models, function(set) {
-        return this.$el.append(new RA.Views.SingleDocument({
+        var view;
+        view = new RA.Views.SingleDocument({
           model: set
-        }).render().el);
+        });
+        this.docViews.push(view);
+        view.on('chosen', function(chosenDoc) {
+          return this.trigger('docSelected', chosenDoc.cid);
+        }, this);
+        return this.$el.append(view.render().el);
       }, this);
       console.log('rendered DocumentList');
       return this;
+    },
+    deselectAllExcept: function(cid) {
+      return _.each(this.docViews, function(view) {
+        if (view.model.cid !== cid) {
+          return view.unchoose();
+        }
+      });
+    },
+    addNew: function() {
+      return this.model.create({
+        editing: true
+      });
     }
   });
 
   RA.Views.SingleDocument = Backbone.View.extend({
     tagName: 'div',
     className: 'singleDocument',
+    events: {
+      "click .choose": "choose",
+      "click .edit": "startEdit",
+      "click .save": "saveEdit",
+      "click .cancel": "cancelEdit",
+      "click .maybedelete": "showDelete",
+      "click .dontdelete": "hideDelete",
+      "click .delete": "delete"
+    },
     initialize: function() {
       console.log("init-ing a RA.Views.SingleDocument");
       return this.model.on('change', this.render, this);
     },
     render: function() {
-      var html, name;
-      html = '';
+      var html, name, partslist;
       name = this.model.get('name');
-      html += "<h3 class='name'>" + name + "</h3>";
+      html = "<button class=\"choose\">choose</button>\n<button class=\"edit\">edit</button>\n<button class=\"maybedelete\">delete</button>\n<button class=\"dontdelete\">not really</button>\n<button class=\"delete\">really delete?</button>\n<h3 class=\"name\">" + name + "</h3>";
+      if (this.model.get('editing')) {
+        html = "<button class=\"save\">save</button>\n<button class=\"cancel\">cancel</button>\n<input type=\"text\" value=\"" + name + "\" />";
+      }
+      this.$el.html(html);
+      partslist = $('<pre></pre>');
+      if (this.model.get('editing')) {
+        partslist = $("<textarea>\n</textarea>");
+      }
+      this.$el.append(partslist);
       _.each(this.model.get('parts'), function(part) {
-        return html += "" + part['condition'] + ": " + part['content'] + "<br>";
+        return partslist.append("[[" + part.condition + "]] " + part.content + "\n");
       });
-      this.$el.append(html);
+      this.$el.toggleClass('editing', this.model.get('editing'));
       return this;
+    },
+    unchoose: function() {
+      return this.$el.removeClass('chosen');
+    },
+    choose: function() {
+      this.$el.addClass('chosen');
+      return this.trigger('chosen', this.model);
+    },
+    startEdit: function() {
+      this.$el.addClass('editing');
+      return this.model.set('editing', true);
+    },
+    cancelEdit: function() {
+      return this.model.set('editing', false);
+    },
+    saveEdit: function() {
+      var newparts, parts;
+      newparts = [];
+      parts = this.$('textarea').val().split(/\s*\[\[\s*/);
+      _.each(parts, function(part) {
+        var bits;
+        bits = part.split(/\s*\]\]\s*/);
+        console.log(['bits', bits]);
+        if (bits.length > 1) {
+          return newparts.push({
+            condition: bits[0],
+            content: bits.slice(1).join(" ]] ")
+          });
+        }
+      });
+      return this.model.save({
+        parts: newparts,
+        name: this.$('input').val(),
+        editing: false
+      });
+    },
+    showDelete: function() {
+      this.$('.maybedelete').hide();
+      this.$('.dontdelete').show();
+      return this.$('.delete').show();
+    },
+    hideDelete: function() {
+      this.$('.dontdelete').hide();
+      this.$('.delete').hide();
+      return this.$('.maybedelete').show();
+    },
+    "delete": function() {
+      return this.model.destroy();
     }
   });
 

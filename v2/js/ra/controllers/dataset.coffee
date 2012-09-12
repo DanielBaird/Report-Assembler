@@ -3,13 +3,13 @@ window.RA ||= {}
 RA.Controllers ||= {}
 
 RA.DatasetController = Backbone.Controller.extend {
+
 	routes:
 		'': 'index'
 		'new': 'newDataset'
 
 	index: () ->
 		datasets = new RA.Collections.Datasets()
-		
 
 		# fake up getting these two datasets from the server..
 		datasets = {

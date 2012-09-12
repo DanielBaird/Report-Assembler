@@ -6,13 +6,8 @@ $ ->
 
 	appModel = new RA.Models.App()
 
-	# check in some sample data
-#	appModel.datasets.add(new RA.Models.Dataset { name: 'my data set' })
-	appModel.documents.add(new RA.Models.Document { name: 'my document' })
-
-	appView = new RA.Views.App({ model: appModel, el: $('.app') })
-	appView.render()
-	appView.refresh()
+	window.app = new RA.Views.App({ model: appModel, el: $('.app') }).render()
+	window.app.refresh()
 
 
 	#################################################################

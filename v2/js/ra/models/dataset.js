@@ -7,6 +7,7 @@
 
   RA.Models.Dataset = Parse.Object.extend({
     className: "Dataset",
+    initialise: function() {},
     defaults: {
       name: "unnamed dataset",
       vars: {

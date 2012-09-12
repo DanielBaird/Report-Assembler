@@ -2,18 +2,14 @@
 (function() {
 
   $(function() {
-    var appModel, appView, doc;
+    var appModel, doc;
     window.RA || (window.RA = {});
     appModel = new RA.Models.App();
-    appModel.documents.add(new RA.Models.Document({
-      name: 'my document'
-    }));
-    appView = new RA.Views.App({
+    window.app = new RA.Views.App({
       model: appModel,
       el: $('.app')
-    });
-    appView.render();
-    appView.refresh();
+    }).render();
+    window.app.refresh();
     return doc = {
       vars: {
         a: 101,

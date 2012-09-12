@@ -6,7 +6,8 @@
   RA.Collections || (RA.Collections = {});
 
   RA.Collections.Datasets = Parse.Collection.extend({
-    model: RA.Models.Dataset
+    model: RA.Models.Dataset,
+    initialise: function() {}
   });
 
 }).call(this);

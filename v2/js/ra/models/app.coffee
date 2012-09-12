@@ -3,46 +3,28 @@ window.RA ||= {}
 RA.Models ||= {}
 
 RA.Models.App = Backbone.Model.extend {
-
-#	defaults:
-#		datasets: new RA.Collections.Datasets()
-#		documents: new RA.Collections.Documents()
-
-
+	# -----------------------------------------------------
+	# -----------------------------------------------------
 	initialize: () ->
 		@datasets = new RA.Collections.Datasets()
 		@documents = new RA.Collections.Documents()
-
-#		@datasets.on 'change', () ->
-#			@trigger 'change'
-
-#		@documents.on 'change', () ->
-#			@trigger 'change'
-
-
+		@result = new RA.Models.Result()
+	# -----------------------------------------------------
 	fetch: () ->
-
-		ds = @datasets
-
 		@datasets.fetch {
-			success: (collection) ->
+			success: () ->
 				console.log "got datasets"
-#				ds.reset collection
-#				collection.trigger 'change'
 
 			error: () ->
-				console.warn "didn't get datasets"
-
+				alert "couldn't load datasets!"
 		}
 
 		@documents.fetch {
-			success: (collection) ->
+			success: () ->
 				console.log "got documents"
-				collection.trigger 'change'
 
 			error: () ->
-				console.warn "didn't get documents"
-
+				alert "couldn't load documents!"
 		}
-
+	# -----------------------------------------------------
 }
