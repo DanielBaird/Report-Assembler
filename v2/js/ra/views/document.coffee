@@ -119,7 +119,7 @@ RA.Views.SingleDocument = Backbone.View.extend {
 	saveEdit: () ->
 		newparts = []
 
-		parts = @.$('textarea').val().split /\s*\[\[\s*/
+		parts = @.$('textarea').val().split /[^\S\n]*\[\[\s*/
 #		console.log ['parts', parts]
 		_.each parts, (part) ->
 			bits = part.split /\s*\]\]\s*/

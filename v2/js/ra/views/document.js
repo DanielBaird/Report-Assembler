@@ -99,7 +99,7 @@
     saveEdit: function() {
       var newparts, parts;
       newparts = [];
-      parts = this.$('textarea').val().split(/\s*\[\[\s*/);
+      parts = this.$('textarea').val().split(/[^\S\n]*\[\[\s*/);
       _.each(parts, function(part) {
         var bits;
         bits = part.split(/\s*\]\]\s*/);
