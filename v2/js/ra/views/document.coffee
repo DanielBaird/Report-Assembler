@@ -122,7 +122,7 @@ RA.Views.SingleDocument = Backbone.View.extend {
 		parts = @.$('textarea').val().split /[^\S\n]*\[\[\s*/
 #		console.log ['parts', parts]
 		_.each parts, (part) ->
-			bits = part.split /\s*\]\]\s*/
+			bits = part.split /\s*\]\][^\S\n]*/
 			console.log ['bits', bits]
 			if bits.length > 1
 				newparts.push {
