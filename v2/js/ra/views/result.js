@@ -13,13 +13,12 @@
       return this.model.on('all', this.render, this);
     },
     render: function() {
-      var data, doc, html;
+      var data, doc, html, mdResult;
       data = this.model.get('data');
       doc = this.model.get('doc');
       if ((doc != null) && (data != null)) {
-        html = "<h3>Resulting Report</h3>\n<pre>";
-        html += this.resolveResult();
-        html += "</pre>";
+        mdResult = this.resolveResult();
+        html = "<div class=\"markdownresult\">\n	<h3>Resulting Report - Markdown</h3>\n	<pre>\n	" + mdResult + "\n	</pre>\n	</div>\n<div class=\"htmlresult\">\n	<h3>Resulting Report - HTML</h3>\n	<div class=\"html\">\n		" + mdResult + "\n	</div>\n</div>";
       } else {
         if (doc != null) {
           html = "<span class=\"subtle\">choose a dataset.</span>";
@@ -43,7 +42,7 @@
           return console.log(["NOT true:", part.condition, part.content]);
         }
       }, this);
-      return result.join(" ");
+      return result.join("");
     },
     fillOut: function(content) {
       var filledOut, value, varname, _ref;

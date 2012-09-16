@@ -16,13 +16,21 @@ RA.Views.Result = Backbone.View.extend {
 		doc = @model.get('doc')
 
 		if doc? and data?
-
+			mdResult = @resolveResult()
 			html = """
-			<h3>Resulting Report</h3>
-			<pre>
+			<div class="markdownresult">
+				<h3>Resulting Report - Markdown</h3>
+				<pre>
+				#{mdResult}
+				</pre>
+				</div>
+			<div class="htmlresult">
+				<h3>Resulting Report - HTML</h3>
+				<div class="html">
+					#{mdResult}
+				</div>
+			</div>
 			"""
-			html += @resolveResult()
-			html += "</pre>"
 
 		else
 
@@ -55,7 +63,7 @@ RA.Views.Result = Backbone.View.extend {
 					console.log ["NOT true:", part.condition, part.content]
 			this
 		)
-		result.join " "
+		result.join ""
 
 	# -----------------------------------------------------
 	fillOut: (content) ->

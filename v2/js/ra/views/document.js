@@ -77,7 +77,7 @@
       }
       this.$el.append(partslist);
       _.each(this.model.get('parts'), function(part) {
-        return partslist.append("[[" + part.condition + "]] " + part.content + "\n");
+        return partslist.append("[[" + part.condition + "]] " + part.content);
       });
       this.$el.toggleClass('editing', this.model.get('editing'));
       return this;
@@ -102,7 +102,7 @@
       parts = this.$('textarea').val().split(/[^\S\n]*\[\[\s*/);
       _.each(parts, function(part) {
         var bits;
-        bits = part.split(/\s*\]\]\s*/);
+        bits = part.split(/\s*\]\][^\S\n]*/);
         console.log(['bits', bits]);
         if (bits.length > 1) {
           return newparts.push({

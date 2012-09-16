@@ -96,7 +96,7 @@ RA.Views.SingleDocument = Backbone.View.extend {
 		@$el.append(partslist)
 
 		_.each @model.get('parts'), (part) ->
-			partslist.append "[[#{part.condition}]] #{part.content}\n"
+			partslist.append "[[#{part.condition}]] #{part.content}"
 
 		@$el.toggleClass 'editing', @model.get('editing')
 
