@@ -10,15 +10,18 @@
     className: 'result',
     initialize: function() {
       console.log("init-ing a RA.Views.Result");
-      return this.model.on('all', this.render, this);
+      this.model.on('all', this.render, this);
+      return this.mdConverter = new Showdown.converter();
     },
     render: function() {
-      var data, doc, html, mdResult;
+      var data, doc, html, htmlResult, mdResult;
       data = this.model.get('data');
       doc = this.model.get('doc');
       if ((doc != null) && (data != null)) {
         mdResult = this.resolveResult();
-        html = "<div class=\"markdownresult\">\n	<h3>Resulting Report - Markdown</h3>\n	<pre>\n	" + mdResult + "\n	</pre>\n	</div>\n<div class=\"htmlresult\">\n	<h3>Resulting Report - HTML</h3>\n	<div class=\"html\">\n		" + mdResult + "\n	</div>\n</div>";
+        htmlResult = this.mdConverter.makeHtml(mdResult);
+        console.log([mdResult, htmlResult]);
+        html = "<div class=\"markdownresult\">\n	<h3>Resulting Report - Markdown</h3>\n	<pre>\n	" + mdResult + "\n	</pre>\n	</div>\n<div class=\"htmlresult\">\n	<h3>Resulting Report - HTML</h3>\n	<div class=\"html\">\n		" + htmlResult + "\n	</div>\n</div>";
       } else {
         if (doc != null) {
           html = "<span class=\"subtle\">choose a dataset.</span>";
@@ -36,10 +39,7 @@
       result = [];
       _.each(this.model.get('doc').get('parts'), function(part) {
         if (this.conditionHolds(part.condition)) {
-          console.log(["true:", part.condition, part.content]);
           return result.push(this.fillOut(part.content));
-        } else {
-          return console.log(["NOT true:", part.condition, part.content]);
         }
       }, this);
       return result.join("");

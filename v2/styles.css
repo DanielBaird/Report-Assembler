@@ -40,12 +40,13 @@ h1:before, h2:before, h3:before, h4:before, h5:before {
 	font-size: 75%;
 }
 
-
+/*
 h1:before { content: '# '; }
 h2:before { content: '## '; }
 h3:before { content: '### '; }
 h4:before { content: '#### '; }
 h5:before { content: '##### '; }
+*/
 
 .singleDataset.editing,
 .singleDocument.editing
@@ -80,12 +81,34 @@ h5:before { content: '##### '; }
 	overflow: auto;
 }
 
+.result {
+	padding: 1em;
+	font-size: 150%;
+	color: #111;
+}
+
 .result .subtle {
 	display: block;
 	font-style: italic;
 	font-weight: bold;
 	text-align: center;
 }
+
+.result .htmlresult .html * {
+	background: none;
+}
+
+.result .htmlresult .html {
+	background: white;
+	padding: 2em;
+	color: #111;
+}
+
+.result .htmlresult .html h5 {	font-size: inherit; }
+.result .htmlresult .html h4 {	font-size: 120%; }
+.result .htmlresult .html h3 {	font-size: 144%; }
+.result .htmlresult .html h2 {	font-size: 172%; }
+.result .htmlresult .html h1 {	font-size: 207%; }
 
 .clearfix:before, .clearfix:after { content: ""; display: table; }
 .clearfix:after { clear: both; }

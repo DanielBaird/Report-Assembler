@@ -10,6 +10,7 @@ RA.Views.Result = Backbone.View.extend {
 	initialize: () ->
 		console.log "init-ing a RA.Views.Result"
 		@model.on 'all', @render, this
+		@mdConverter = new Showdown.converter()
 	# -----------------------------------------------------
 	render: () ->
 		data = @model.get('data')
@@ -17,6 +18,8 @@ RA.Views.Result = Backbone.View.extend {
 
 		if doc? and data?
 			mdResult = @resolveResult()
+			htmlResult = @mdConverter.makeHtml mdResult
+			console.log [mdResult, htmlResult]
 			html = """
 			<div class="markdownresult">
 				<h3>Resulting Report - Markdown</h3>
@@ -27,7 +30,7 @@ RA.Views.Result = Backbone.View.extend {
 			<div class="htmlresult">
 				<h3>Resulting Report - HTML</h3>
 				<div class="html">
-					#{mdResult}
+					#{htmlResult}
 				</div>
 			</div>
 			"""
@@ -57,10 +60,10 @@ RA.Views.Result = Backbone.View.extend {
 			@model.get('doc').get('parts')
 			(part) ->
 				if @conditionHolds part.condition
-					console.log ["true:", part.condition, part.content]
+#					console.log ["true:", part.condition, part.content]
 					result.push @fillOut(part.content)
-				else
-					console.log ["NOT true:", part.condition, part.content]
+#				else
+#					console.log ["NOT true:", part.condition, part.content]
 			this
 		)
 		result.join ""
