@@ -127,4 +127,3 @@ if typeof module != 'undefined'
 if typeof(define) == 'function' and define.amd
     define 'ra', () ->
         return RA
-

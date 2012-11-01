@@ -14,7 +14,7 @@ task 'compress', 'Runs UglifyJS on stitched file in order to compress it', ->
   compress()
 
 task 'build', 'Does the full build magic', ->
-  test -> compile -> stitch -> compress()
+  compile -> test -> stitch -> compress()
 
 task 'develop', 'Only compile and stitch, don\'t test or compress', ->
   compile -> stitch()
@@ -32,7 +32,7 @@ test = (callback) ->
 
 
 compile = (callback) ->
-  exec 'coffee -o lib/ -c source/', (err, stdout, stderr) ->
+  exec 'coffee -o bin/ -c source/', (err, stdout, stderr) ->
     throw err if err
     console.log "Compiled coffee files"
     callback?()
