@@ -4,36 +4,56 @@ RA = {
     resolve: (doc, data, log_callback) ->
         # doc: a string
         # data: a hash/object
-        # log: an optional logging function (will be passed strings)
+        # log: an optional logging function (will be passed a string to be logged)
 
         # split the doc up into parts
+
         parts = @_splitDoc doc
         result = []
 
+        # based on each part's condition, decide whether to include it
         for part in parts
             if RA._conditionHolds part.condition, data, log_callback
-                if log_callback
-                    log_callback "true: [[" + part.condition + "]], content: " + part.content.split('\n')[0][0..20] + "..."
+                log_callback("true: [[" + part.condition + "]], content: " + part.content.split('\n')[0][0..20] + "...") if log_callback
+                # the condition holds, so fill out the part and add it to the results
                 result.push RA._fillOut(part.content, data)
             else
-                if log_callback
-                    log_callback "NOT true: [[" + part.condition + "]], content: " + part.content.split('\n')[0][0..20] + "..."
+                # the condition doesn't hold, so don't add the part
+                log_callback("NOT true: [[" + part.condition + "]], content: " + part.content.split('\n')[0][0..20] + "...") if log_callback
 
+        # the final result is the join of all the included parts
         result.join ""
     # ----------------------------------------------------------------
     _splitDoc: (doc) ->
         # split the doc into parts
+
+        # parts are separated by [[ condition ]]
         parts = []
 
-        rawparts = doc.split /[^\S\n]*\[\[\s*/
+        # the first split is on the [[, giving some number of rawparts
+        openregex = ///
+#            [^\S\n]*    # eat preceeding whitespace, except for newlines.  Maybe don't do this?
+            \[\[        # eat two opening square brackets eg '[['
+            \s*         # eat trailing whitespace (between opening brackets and the condition)
+        ///
+        rawparts = doc.split openregex
         for part in rawparts
-            bits = part.split /\s*\]\][^\S\n]*/
+            # the second split is on each individual rawpart, splitting on the
+            # ]].  That gives two parts (the condition and the content).
+            closeregex = ///
+                \s*         # whitespace between condition and close brackets
+                \]\]        # close brackets ]]
+                [^\S\n]*    # following whitespace, apart from newlines
+            ///
+            bits = part.split closeregex
             if bits.length > 1
                 parts.push {
                     condition: bits[0]
-                    content: bits.slice(1).join(" ]] ")
+                    content: bits.slice(1).join(" ]] ") # put back any ]] other than the first
                 }
             else
+                # If there's no condition (which happens at the very start of the
+                # doc) then we pretend there's a conditon of [[always]]
                 parts.push {
                     condition: "always"
                     content: bits[0]
@@ -53,14 +73,14 @@ RA = {
 
             # left AND right
             "([\\s\\S]*)\\s+(and|AND)\\s+([\\s\\S]*)": (matches) ->
-                left = RA._conditionHolds matches[1], data
-                right = RA._conditionHolds matches[3], data
+                left = RA._conditionHolds matches[1], data, log_callback
+                right = RA._conditionHolds matches[3], data, log_callback
                 (left and right)
 
             # left OR right
             "([\\s\\S]*)\\s+(or|OR)\\s+([\\s\\S]*)": (matches) ->
-                left = RA._conditionHolds matches[1], data
-                right = RA._conditionHolds matches[3], data
+                left = RA._conditionHolds matches[1], data, log_callback
+                right = RA._conditionHolds matches[3], data, log_callback
                 (left or right)
 
             # left < right   ..less than
@@ -71,8 +91,8 @@ RA = {
             # left !== right ..not equal to
             # left <> right  ..not equal to
             "(\\S+)\\s*(<|>|==?|!==?|<>)\\s*(\\S+)": (matches) ->
-                left = RA._resolveTerm matches[1], data
-                right = RA._resolveTerm matches[3], data
+                left = RA._resolveTerm matches[1], data, log_callback
+                right = RA._resolveTerm matches[3], data, log_callback
 
                 switch matches[2]
                     when '<'
@@ -104,14 +124,24 @@ RA = {
 
         filledOut
     # ----------------------------------------------------------------
-    _resolveTerm: (term, data) ->
-        if isNaN term
-            if term.indexOf("$$") isnt -1
-                term = RA._fillOut term, data
+    _resolveTerm: (term, data, log_callback) ->
 
-            data[term]
+        if term[0..1] == "$$"
+            # eat any initial dollardollar things
+            term = term[2..]
+
+        if term.indexOf("$$") isnt -1
+            term = RA._fillOut term, data
+
+        if data[term]
+            value = data[term]
+            if isNaN value
+                value
+            else
+                parseFloat value
+
         else
-            parseInt term
+            parseFloat term
     # ----------------------------------------------------------------
 }
 
