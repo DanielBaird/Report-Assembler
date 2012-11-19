@@ -90,15 +90,19 @@ RA = {
             # left != right  ..not equal to
             # left !== right ..not equal to
             # left <> right  ..not equal to
-            "(\\S+)\\s*(<|>|==?|!==?|<>)\\s*(\\S+)": (matches) ->
+            "(\\S+)\\s*(<=?|>=?|==?|!==?|<>)\\s*(\\S+)": (matches) ->
                 left = RA._resolveTerm matches[1], data, log_callback
                 right = RA._resolveTerm matches[3], data, log_callback
 
                 switch matches[2]
                     when '<'
                         left < right
+                    when '<='
+                        left <= right
                     when '>'
                         left > right
+                    when '>='
+                        left >= right
                     when '=','=='
                         left == right
                     when '!=','!==','<>'
@@ -133,7 +137,7 @@ RA = {
         if term.indexOf("$$") isnt -1
             term = RA._fillOut term, data
 
-        if data[term]
+        if data?.hasOwnProperty term
             value = data[term]
             if isNaN value
                 value

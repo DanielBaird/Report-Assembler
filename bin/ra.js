@@ -66,15 +66,19 @@
           right = RA._conditionHolds(matches[3], data, log_callback);
           return left || right;
         },
-        "(\\S+)\\s*(<|>|==?|!==?|<>)\\s*(\\S+)": function(matches) {
+        "(\\S+)\\s*(<=?|>=?|==?|!==?|<>)\\s*(\\S+)": function(matches) {
           var left, right;
           left = RA._resolveTerm(matches[1], data, log_callback);
           right = RA._resolveTerm(matches[3], data, log_callback);
           switch (matches[2]) {
             case '<':
               return left < right;
+            case '<=':
+              return left <= right;
             case '>':
               return left > right;
+            case '>=':
+              return left >= right;
             case '=':
             case '==':
               return left === right;
@@ -115,7 +119,7 @@
       if (term.indexOf("$$") !== -1) {
         term = RA._fillOut(term, data);
       }
-      if (data[term]) {
+      if (data != null ? data.hasOwnProperty(term) : void 0) {
         value = data[term];
         if (isNaN(value)) {
           return value;

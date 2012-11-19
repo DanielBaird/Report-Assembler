@@ -81,6 +81,27 @@ describe 'Report Assembler variable resolution conditions', ->
         expect( RA.resolve('[[$$long$$n == $$b1]]abc', data) ).toEqual ''
 
 # -------------------------------------------------------------------
+describe 'Report Assembler literal comparisons', ->
+
+    data = null
+
+    it 'should compare integer constants in conditions', ->
+        expect( RA.resolve('[[12 == 12]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[12 == 34]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[3 > 12]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[3 < 12]]abc', data) ).toEqual 'abc'
+
+    it 'should compare floating-point constants in conditions', ->
+        expect( RA.resolve('[[1.2 == 1.20]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[1.2 == 3.4]]abc', data) ).toEqual ''
+
+        expect( RA.resolve('[[3.1 > 3.0]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[3.1 < 3.0]]abc', data) ).toEqual ''
+
+        expect( RA.resolve('[[3.1 < 1.2]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[3.1 > 1.2]]abc', data) ).toEqual 'abc'
+
+# -------------------------------------------------------------------
 describe 'Report Assembler string comparator conditions', ->
 
     data = null
@@ -113,7 +134,7 @@ describe 'Report Assembler integer comparator conditions', ->
         expect( RA.resolve('[[one > two]]abc', data) ).toEqual ''
         expect( RA.resolve('[[ten > two]]abc', data) ).toEqual 'abc'
 
-    xit 'should compare numeric variables using greater-than-or-equal-to', ->
+    it 'should compare numeric variables using greater-than-or-equal-to', ->
         expect( RA.resolve('[[one >= one]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[one >= two]]abc', data) ).toEqual ''
         expect( RA.resolve('[[ten >= two]]abc', data) ).toEqual 'abc'
@@ -123,7 +144,7 @@ describe 'Report Assembler integer comparator conditions', ->
         expect( RA.resolve('[[one < two]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[ten < two]]abc', data) ).toEqual ''
 
-    xit 'should compare numeric variables using less-than-or-equal-to', ->
+    it 'should compare numeric variables using less-than-or-equal-to', ->
         expect( RA.resolve('[[one <= one]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[one <= two]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[ten <= two]]abc', data) ).toEqual ''
@@ -148,7 +169,7 @@ describe 'Report Assembler integer-looking-strings comparator conditions', ->
         expect( RA.resolve('[[one > two]]abc', data) ).toEqual ''
         expect( RA.resolve('[[ten > two]]abc', data) ).toEqual 'abc'
 
-    xit 'should compare numeric-looking string variables using greater-than-or-equal-to', ->
+    it 'should compare numeric-looking string variables using greater-than-or-equal-to', ->
         expect( RA.resolve('[[one >= one]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[one >= two]]abc', data) ).toEqual ''
         expect( RA.resolve('[[ten >= two]]abc', data) ).toEqual 'abc'
@@ -158,7 +179,7 @@ describe 'Report Assembler integer-looking-strings comparator conditions', ->
         expect( RA.resolve('[[one < two]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[ten < two]]abc', data) ).toEqual ''
 
-    xit 'should compare numeric-looking string variables using less-than-or-equal-to', ->
+    it 'should compare numeric-looking string variables using less-than-or-equal-to', ->
         expect( RA.resolve('[[one <= one]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[one <= two]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[ten <= two]]abc', data) ).toEqual ''
@@ -182,7 +203,7 @@ describe 'Report Assembler floating-point comparator conditions', ->
         expect( RA.resolve('[[oneish > littlelarger]]abc', data) ).toEqual ''
         expect( RA.resolve('[[tenish > twoish]]abc', data) ).toEqual 'abc'
 
-    xit 'should compare floating-point variables using greater-than-or-equal-to', ->
+    it 'should compare floating-point variables using greater-than-or-equal-to', ->
         expect( RA.resolve('[[oneish >= oneish]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[oneish >= littlelarger]]abc', data) ).toEqual ''
         expect( RA.resolve('[[tenish >= twoish]]abc', data) ).toEqual 'abc'
@@ -192,7 +213,7 @@ describe 'Report Assembler floating-point comparator conditions', ->
         expect( RA.resolve('[[oneish < littlelarger]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[tenish < twoish]]abc', data) ).toEqual ''
 
-    xit 'should compare floating-point variables using less-than-or-equal-to', ->
+    it 'should compare floating-point variables using less-than-or-equal-to', ->
         expect( RA.resolve('[[oneish <= oneish]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[oneish <= littlelarger]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[tenish <= twoish]]abc', data) ).toEqual ''
