@@ -1,3 +1,4 @@
+
 Report Assembler makes it easy to dynamically generate a textual report
 from data.  You can **insert** data values into the report text, and you
 can change what gets included in the report using **conditions**.
@@ -28,3 +29,14 @@ Conditions are wrapped in double square brackets, like this:
 `[[ZombieDeadliness > PirateDeadliness]]`.  Anything after a conditon 
 will only be included in the final report if the conditon is true.
 
+These are RA's conditions:
+
+* `always` is always true
+* `never` is never true
+* `a == b` is true if `a` and `b` are equal
+* `a != b` is true if `a` and `b` are not equal
+* `a > b` is true if `a` is greater than `b`
+* `a >= b` is true if `a` is greater than `b` or equal to `b`
+* `a < b` is true if `a` is less than `b`
+* `a <= b` is true if `a` is less than `b` or equal to `b`
+* `a <<10 b` is true if a is 10 or more less than `b`

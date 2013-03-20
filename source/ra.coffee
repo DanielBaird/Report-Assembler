@@ -107,6 +107,18 @@ RA = {
                         left == right
                     when '!=','!==','<>'
                         left != right
+
+            # left <<5 right   ..at least 5 less than
+            # left 10>> right   ..at least 10 greater than
+            #1         23   4     5    6        7 ..match indices
+            "(\\S+)\\s*((<<)(\d+)|(\d+)(>>))\\s*(\\S+)": (matches) ->
+                left = RA._resolveTerm matches[1], data, log_callback
+                right = RA._resolveTerm matches[7], data, log_callback
+
+                if matches[3] == '<<' and matches[4]?
+                    diff = _resolveTerm matches[4]
+                    # TODO make this actually do the right thing
+                    return false
         }
 
         for pattern, evaluator of conditions

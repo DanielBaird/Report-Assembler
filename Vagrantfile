@@ -9,9 +9,6 @@
 $provisioning_script = <<SCRIPT_TERMINATOR
 # now in shell script..
 
-#
-# apt-get all the stuff we might need
-#
 echo ''
 echo ' *************************************************************'
 echo ' ************************************  apt-getting everything '
@@ -22,27 +19,26 @@ add-apt-repository ppa:chris-lea/node.js
 apt-get update
 apt-get -y install nodejs
 
-#
-# compile node from source
-#
-# echo ''
-# echo ' *************************************************************'
-# echo ' ********************************************  compiling node '
-# echo ' *************************************************************'
-# git clone git://github.com/joyent/node.git node
-# cd node
-# ./configure
-# make
-# make install
+echo ''
+echo ' *************************************************************'
+echo ' *******************************************  installing node '
+echo ' *************************************************************'
+apt-get -y install build-essential g++ python-software-properties python curl libssl-dev apache2-utils git-core
+add-apt-repository ppa:chris-lea/node.js
+apt-get update
+apt-get -y install nodejs
 
 #
 # install node libs
 #
 npm install -g jasmine-node coffee-script uglify-js
 
-#
-# all done.
-#
+# 
+# run tests
+# 
+cd /vagrant
+cake test
+
 echo ''
 echo ' *************************************************************'
 echo ' *************************************************  all done! '
@@ -65,4 +61,5 @@ Vagrant.configure("2") do |config|
 
 	# forward ports, host:4567 to vm:80
 	config.vm.network :forwarded_port, :host => 4567, :guest => 80
+
 end

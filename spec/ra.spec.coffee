@@ -101,6 +101,13 @@ describe 'Report Assembler literal comparisons', ->
         expect( RA.resolve('[[3.1 < 1.2]]abc', data) ).toEqual ''
         expect( RA.resolve('[[3.1 > 1.2]]abc', data) ).toEqual 'abc'
 
+    it 'should compare integers and floats sensibly', ->
+        expect( RA.resolve('[[3.0 == 3]]abc') ).toEqual 'abc'
+        expect( RA.resolve('[[3.0 < 3]]abc') ).toEqual ''
+        expect( RA.resolve('[[3.0 > 3]]abc') ).toEqual ''
+        expect( RA.resolve('[[3 == 3.0]]abc') ).toEqual 'abc'
+        expect( RA.resolve('[[3 < 3.0]]abc') ).toEqual ''
+        expect( RA.resolve('[[3 > 3.0]]abc') ).toEqual ''
 # -------------------------------------------------------------------
 describe 'Report Assembler string comparator conditions', ->
 
@@ -114,6 +121,10 @@ describe 'Report Assembler string comparator conditions', ->
         expect( RA.resolve('[[a1 == b1]]abc', data) ).toEqual ''
         expect( RA.resolve('[[a1 != a2]]abc', data) ).toEqual ''
         expect( RA.resolve('[[a1 != b1]]abc', data) ).toEqual 'abc'
+
+    it 'should order-compare string variables in alpha order', ->
+        expect( RA.resolve('[[a1 < b1]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[a1 > b1]]abc', data) ).toEqual ''
 
 # -------------------------------------------------------------------
 describe 'Report Assembler integer comparator conditions', ->
@@ -217,6 +228,22 @@ describe 'Report Assembler floating-point comparator conditions', ->
         expect( RA.resolve('[[oneish <= oneish]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[oneish <= littlelarger]]abc', data) ).toEqual 'abc'
         expect( RA.resolve('[[tenish <= twoish]]abc', data) ).toEqual ''
+
+
+# -------------------------------------------------------------------
+describe 'Report Assembler different-by-at-least conditions', ->
+
+    data = null
+
+    beforeEach ->
+        data = { one: 1, two: 2, ten: 10, eleven: 11, twenty: 20 }
+
+    it 'should compare integers using less-than-by-at-least', ->
+        expect( RA.resolve('[[one <<10 two]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[one <<10 ten]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[one <<10 eleven]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[two <<10 eleven]]abc', data) ).toEqual ''
+
 
 
 

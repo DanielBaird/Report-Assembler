@@ -53,7 +53,7 @@ compile = (callback) ->
 
 
 compress = (callback) ->
-  exec 'uglifyjs --overwrite app.js', (err, stdout, stderr) ->
+  exec 'uglifyjs bin/ra.js -o bin/ra.min.js', (err, stdout, stderr) ->
     throw err if err
-    console.log "Compressed app.js"
+    console.log "Compressed ra.js to ra.min.js"
     callback?()
