@@ -4,20 +4,22 @@
 task 'test', 'Runs all Jasmine specs in spec/ folder', ->
   test()
 
-task 'compile', 'Compiles coffee in src/ to js in bin/', ->
+task 'compile', 'Compiles coffee in source/ to js in bin/', ->
   compile()
 
-task 'stitch', 'Stitches all app .js files', ->
-  stitch()
+# task 'stitch', 'Stitches all app .js files', ->
+#   stitch()
 
 task 'compress', 'Runs UglifyJS on stitched file in order to compress it', ->
   compress()
 
 task 'build', 'Does the full build magic', ->
-  compile -> test -> stitch -> compress()
+  # compile -> test -> stitch -> compress()
+  compile -> test -> compress()
 
 task 'develop', 'Only compile and stitch, don\'t test or compress', ->
-  compile -> stitch()
+  # compile -> stitch()
+  compile()
 
 
 test = (callback) ->
@@ -38,16 +40,16 @@ compile = (callback) ->
     callback?()
 
 
-stitch = (callback) ->
-  stitch = require 'stitch'
-  fs = require 'fs'
+# stitch = (callback) ->
+#   stitch = require 'stitch'
+#   fs = require 'fs'
 
-  myPackage = stitch.createPackage paths: [__dirname + '/bin', __dirname + '/vendor']
-  myPackage.compile (err, source) ->
-    fs.writeFile 'app.js', source, (err) ->
-      throw err if err
-      console.log "Stitched js files"
-      callback?()
+#   myPackage = stitch.createPackage paths: [__dirname + '/bin', __dirname + '/vendor']
+#   myPackage.compile (err, source) ->
+#     fs.writeFile 'app.js', source, (err) ->
+#       throw err if err
+#       console.log "Stitched js files"
+#       callback?()
 
 
 compress = (callback) ->
