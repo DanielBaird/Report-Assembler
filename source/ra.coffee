@@ -63,7 +63,7 @@ RA = {
     # ----------------------------------------------------------------
     _conditionHolds: (condition, data, log_callback) ->
 
-        conditions = {
+        conditions =
 
             "never": () ->
                 false
@@ -90,7 +90,8 @@ RA = {
             # left != right  ..not equal to
             # left !== right ..not equal to
             # left <> right  ..not equal to
-            "(\\S+)\\s*(<=?|>=?|==?|!==?|<>)\\s*(\\S+)": (matches) ->
+            # 1111      2222222222222222222      3333  ..match indices
+            "(\\S+)\\s+(<=?|>=?|==?|!==?|<>)\\s+(\\S+)": (matches) ->
                 left = RA._resolveTerm matches[1], data, log_callback
                 right = RA._resolveTerm matches[3], data, log_callback
 
@@ -110,16 +111,16 @@ RA = {
 
             # left <<5 right   ..at least 5 less than
             # left 10>> right   ..at least 10 greater than
-            #1         23   4     5    6        7 ..match indices
-            "(\\S+)\\s*((<<)(\d+)|(\d+)(>>))\\s*(\\S+)": (matches) ->
+            #           222222222222222222222            ..match indices
+            # 1111       33  4444   5555  66       7777  ..match indices
+            "(\\S+)\\s+((<<)(\\d+)|(\\d+)(>>))\\s+(\\S+)": (matches) ->
                 left = RA._resolveTerm matches[1], data, log_callback
                 right = RA._resolveTerm matches[7], data, log_callback
 
                 if matches[3] == '<<' and matches[4]?
-                    diff = _resolveTerm matches[4]
-                    # TODO make this actually do the right thing
-                    return false
-        }
+                    diff = RA._resolveTerm matches[4], log_callback
+                    # TODO: fail out if left isn't numeric
+                    (left + diff) <= right
 
         for pattern, evaluator of conditions
             regex = new RegExp pattern

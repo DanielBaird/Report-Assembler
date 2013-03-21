@@ -71,7 +71,7 @@
           right = RA._conditionHolds(matches[3], data, log_callback);
           return left || right;
         },
-        "(\\S+)\\s*(<=?|>=?|==?|!==?|<>)\\s*(\\S+)": function(matches) {
+        "(\\S+)\\s+(<=?|>=?|==?|!==?|<>)\\s+(\\S+)": function(matches) {
           var left, right;
 
           left = RA._resolveTerm(matches[1], data, log_callback);
@@ -92,6 +92,16 @@
             case '!==':
             case '<>':
               return left !== right;
+          }
+        },
+        "(\\S+)\\s+((<<)(\\d+)|(\\d+)(>>))\\s+(\\S+)": function(matches) {
+          var diff, left, right;
+
+          left = RA._resolveTerm(matches[1], data, log_callback);
+          right = RA._resolveTerm(matches[7], data, log_callback);
+          if (matches[3] === '<<' && (matches[4] != null)) {
+            diff = RA._resolveTerm(matches[4], log_callback);
+            return (left + diff) <= right;
           }
         }
       };

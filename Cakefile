@@ -24,7 +24,7 @@ task 'develop', 'Only compile and stitch, don\'t test or compress', ->
 
 test = (callback) ->
   console.log "Running Jasmine specs"
-  exec 'jasmine-node --coffee spec/', (err, stdout, stderr) =>
+  exec 'jasmine-node --noStack --coffee spec/', (err, stdout, stderr) =>
     console.log stdout + stderr
 
     # hack to work around jasmine-node's bad return vals:

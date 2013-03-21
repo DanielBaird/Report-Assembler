@@ -239,10 +239,13 @@ describe 'Report Assembler different-by-at-least conditions', ->
         data = { one: 1, two: 2, ten: 10, eleven: 11, twenty: 20 }
 
     it 'should compare integers using less-than-by-at-least', ->
-        expect( RA.resolve('[[one <<10 two]]abc', data) ).toEqual ''
-        expect( RA.resolve('[[one <<10 ten]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[one <<10 one]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[one <<10 ten]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[two <<10 one]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[twenty <<10 two]]abc', data) ).toEqual ''
         expect( RA.resolve('[[one <<10 eleven]]abc', data) ).toEqual 'abc'
-        expect( RA.resolve('[[two <<10 eleven]]abc', data) ).toEqual ''
+        expect( RA.resolve('[[one <<10 twenty]]abc', data) ).toEqual 'abc'
+        expect( RA.resolve('[[two <<10 twenty]]abc', data) ).toEqual 'abc'
 
 
 
